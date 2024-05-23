@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import List from './List';
 
 const Content = () => {
@@ -24,6 +24,18 @@ const Content = () => {
     // }
 
     function handleClick(){
+
+        const note = {title,content}
+
+        fetch("http://localhost:8080/note",{
+            method:"POST",
+            headers:{"content-Type":"application/json"},
+            body:JSON.stringify(note)
+        }).then(()=>{
+            console.log("new note added")
+        })
+
+
         setNotes(pre =>{
             return([...pre,{title,content}])
         })
@@ -39,11 +51,19 @@ const Content = () => {
         })
     }
 
+    useEffect(()=>{
+        fetch('http://localhost:8080/notes')
+        .then((res)=>res.json())
+        .then((result)=>{
+            setNotes(result);
+        })
+    },[])
+
   return (
     <div>
     <div className="container mt-5 content">
         <div className='row'>
-            <input type="text" onChange={handleTitle} name="title" placeholder='Title' value={title}></input>
+            <input type="text" onChange={handleTitle} name="title" placeholder='Title....' value={title}></input>
         </div>
         <div className='row'>
             <textarea rows="6" onChange={handleContent} placeholder='Make a note....' value={content}></textarea>
