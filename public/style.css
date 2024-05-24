@@ -48,3 +48,7 @@ textarea:focus,input:focus{
     display: flex;
     justify-content: center;
 }
+
+.button>.btn:focus {
+    box-shadow: none;
+}

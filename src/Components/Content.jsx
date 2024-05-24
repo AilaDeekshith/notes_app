@@ -5,10 +5,12 @@ const Content = () => {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+
     // const [note, setNote] = useState({
     //     title:"",
     //     content:""
     // });
+
     const [notes, setNotes] = useState([]);
 
     function handleTitle(event){
@@ -35,20 +37,40 @@ const Content = () => {
             console.log("new note added")
         })
 
-
         setNotes(pre =>{
             return([...pre,{title,content}])
         })
+
         setTitle("")
         setContent("")
     }
 
-    function deleteNote(id){
-        setNotes((pre) => {
-            return pre.filter((note,index)=>{
-                return index !== id
-            })
+    function deleteNote(title){
+
+        const url = "http://localhost:8080/deleteNote/"+title
+
+        console.log(url)
+        
+        fetch(url,{
+             method:"DELETE"
+         }).then(response => {
+            if (response.ok) {
+                // If the DELETE request was successful, fetch the updated list of notes
+                return fetch('http://localhost:8080/notes');
+            } else {
+                throw new Error('Failed to delete the note');
+            }
         })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            setNotes(result); // Update the state with the new list of notes
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
     }
 
     useEffect(()=>{
@@ -74,7 +96,7 @@ const Content = () => {
     </div>
     <div className="container mt-5">
         <div className='row'>
-            {notes.map((note,index)=>{return <List item={note} id={index} onChecked={deleteNote}></List>})}
+            {notes.map((note,index)=>{return <List item={note} onChecked={deleteNote}></List>})}
         </div>
     </div>
     </div>
