@@ -28,4 +28,8 @@ public class NotesController {
     public void add(@RequestBody Note note){
         notesRepo.save(note);
     }
+    @DeleteMapping("/deleteNote/{title}")
+    public void deleteByTitle(@PathVariable String title){
+        notesRepo.deleteByTitle(title);
+    }
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NotesRepo extends MongoRepository<Note,Integer> {
+    void deleteByTitle(String title);
 }
